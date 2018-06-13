@@ -8,16 +8,24 @@ import Axios from 'axios'
 
 const Home = () => import('./components/Home.vue').then(m => m.default)
 const Login = () => import('./components/Login.vue').then(m => m.default)
+const Register = () => import('./components/Register.vue').then(m => m.default)
 
 Vue.use(VueRouter)
 
 const routes = [{
+  name: 'home',
   path: '/',
   component: Home
 },
 {
+  name: 'login',
   path: '/login',
   component: Login
+},
+{
+  name: 'register',
+  path: '/register',
+  component: Register
 }]
 
 const router = new VueRouter({

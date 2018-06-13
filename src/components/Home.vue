@@ -1,7 +1,6 @@
 <template>
   <div>
-    <x-header style="background-color:#000;"
-              :left-options="{backText: ''}"></x-header>
+    <x-header :left-options="{backText: ''}"></x-header>
     <div class="vux-demo">
       <img class="logo" src="../assets/vux_logo.png">
       <h1> </h1>

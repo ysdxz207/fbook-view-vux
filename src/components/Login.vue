@@ -1,7 +1,6 @@
 <template>
   <div>
-    <x-header style="background-color:#000;"
-              title="登录"
+    <x-header title="登录"
               :left-options="{
                 showBack: false,
                 preventGoBack: true
@@ -19,7 +18,8 @@
                 action-type="button"
                 :gradients="['#FFBD17', '#FFC92A']"
                 @click.native="login"
-                :show-loading="showBtnLoading"></x-button>
+                :show-loading="showBtnLoading"
+                style="width: 94%;"></x-button>
     </group>
     <group title="没有账号？">
       <box gap="10px 10px">
@@ -28,11 +28,13 @@
         </router-link>
       </box>
     </group>
+
+    <toast v-model="showTip" type="text">{{ tipMsg }}</toast>
   </div>
 </template>
 
 <script>
-  import {XHeader, Group, XInput, XButton, Box} from 'vux'
+  import {XHeader, Group, XInput, XButton, Box, Toast} from 'vux'
 
   export default {
     components: {
@@ -40,7 +42,8 @@
       Group,
       XInput,
       XButton,
-      Box
+      Box,
+      Toast
     },
     data () {
       return {
@@ -50,7 +53,9 @@
           captcha: ''
         },
         captchaImg: this.ajax.defaults.baseURL + '/captcha.jpg',
-        showBtnLoading: false
+        showBtnLoading: false,
+        showTip: false,
+        tipMsg: ''
       }
     },
     methods: {
@@ -63,7 +68,7 @@
             switch (response.data.statusCode) {
               case 200:
                 localStorage.setItem('isLogin', true)
-                router.forward({path: '/'})
+                _this.$router.push({path: '/'})
                 break
               case 300:
                 _this.user.captcha = ''
@@ -71,6 +76,8 @@
                   // 刷新验证码
                   _this.refreshCaptcha()
                 }
+                _this.tipMsg = response.data.message
+                _this.showTip = true
             }
           }).catch(function (error) {
             if (error) {
@@ -86,7 +93,7 @@
   }
 </script>
 
-<style>
+<style lang="less">
   .vux-demo {
     text-align: center;
   }
