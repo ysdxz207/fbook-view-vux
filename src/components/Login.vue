@@ -7,9 +7,9 @@
                 preventGoBack: true
               }"></x-header>
     <group>
-      <x-input title="用户名"></x-input>
-      <x-input title="密码"></x-input>
-      <x-input title="验证码">
+      <x-input title="用户名" v-model="user.uname"></x-input>
+      <x-input title="密码" v-model="user.upass" type="password"></x-input>
+      <x-input title="验证码" v-model="user.captcha">
         <img slot="right-full-height" :src="captchaImg">
       </x-input>
     </group>
@@ -17,7 +17,9 @@
       <x-button text="登录"
                 type="primary"
                 action-type="button"
-                :gradients="['#FFBD17', '#FFC92A']"></x-button>
+                :gradients="['#FFBD17', '#FFC92A']"
+                @click.native="login"
+                :show-loading="showBtnLoading"></x-button>
     </group>
     <group title="没有账号？">
       <box gap="10px 10px">
@@ -45,20 +47,23 @@
         user: {
           uname: '',
           upass: '',
-          captcha: '',
-          captchaImg: this.ajax.defaults.baseURL + '/captcha.jpg'
-        }
+          captcha: ''
+        },
+        captchaImg: this.ajax.defaults.baseURL + '/captcha.jpg',
+        showBtnLoading: false
       }
     },
     methods: {
       login () {
         let _this = this
+        _this.showBtnLoading = true
         _this.ajax.post('/login', this.user)
           .then(function (response) {
+            _this.showBtnLoading = false
             switch (response.data.statusCode) {
               case 200:
                 localStorage.setItem('isLogin', true)
-                // $router.forward({path: '/'})
+                router.forward({path: '/'})
                 break
               case 300:
                 _this.user.captcha = ''
@@ -66,15 +71,12 @@
                   // 刷新验证码
                   _this.refreshCaptcha()
                 }
-                // $dialog.alert({
-                //   content: '错误:' + response.data.message,
-                //   okTheme: 'energized'
-                // })
             }
           }).catch(function (error) {
             if (error) {
               console.log(error)
             }
+            _this.showBtnLoading = false
           })
       },
       refreshCaptcha () {

@@ -7,8 +7,8 @@
                 preventGoBack: true
               }"></x-header>
     <group>
-      <x-input title="用户名"></x-input>
-      <x-input title="密码"></x-input>
+      <x-input title="用户名" :name="user.uname"></x-input>
+      <x-input title="密码" :name="user.upass"></x-input>
       <x-input title="重复密码"></x-input>
     </group>
     <group>
@@ -42,9 +42,7 @@
       return {
         user: {
           uname: '',
-          upass: '',
-          captcha: '',
-          captchaImg: this.ajax.defaults.baseURL + '/captcha.jpg'
+          upass: ''
         }
       }
     },
