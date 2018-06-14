@@ -9,7 +9,7 @@
       <x-input title="用户名" v-model="user.uname"></x-input>
       <x-input title="密码" v-model="user.upass" type="password"></x-input>
       <x-input title="验证码" v-model="user.captcha">
-        <img slot="right-full-height" :src="captchaImg">
+        <img slot="right-full-height" :src="captchaImg" @click="refreshCaptcha">
       </x-input>
     </group>
     <group>

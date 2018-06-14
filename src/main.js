@@ -9,6 +9,7 @@ import Axios from 'axios'
 const Home = () => import('./components/Home.vue').then(m => m.default)
 const Login = () => import('./components/Login.vue').then(m => m.default)
 const Register = () => import('./components/Register.vue').then(m => m.default)
+const Book = () => import('./components/Book.vue').then(m => m.default)
 
 Vue.use(VueRouter)
 
@@ -26,6 +27,11 @@ const routes = [{
   name: 'register',
   path: '/register',
   component: Register
+},
+{
+  name: 'book',
+  path: '/book',
+  component: Book
 }]
 
 const router = new VueRouter({

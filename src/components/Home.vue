@@ -1,24 +1,32 @@
 <template>
   <div>
-    <x-header :left-options="{backText: ''}"></x-header>
-    <div class="vux-demo">
-      <img class="logo" src="../assets/vux_logo.png">
-      <h1> </h1>
-    </div>
-    <group title="cell demo">
-      <cell title="VUX" value="cool" is-link></cell>
-    </group>
+    <x-header :left-options="{
+                showBack: false,
+                preventGoBack: true
+              }"></x-header>
+
+    <box gap="16px 20px">
+      <flexbox gutter="12"
+               orient="horizontal"
+               direction="row"
+               wrap="wrap"
+               align="center">
+        <flexbox-item style="border: 1px solid #DDDDDD;width: 20%;height: 120px"
+                      v-for="n in 10">{{n}}</flexbox-item>
+      </flexbox>
+    </box>
   </div>
 </template>
 
 <script>
-import { XHeader, Group, Cell } from 'vux'
+import { XHeader, Box, Flexbox, FlexboxItem } from 'vux'
 
 export default {
   components: {
     XHeader,
-    Group,
-    Cell
+    Box,
+    Flexbox,
+    FlexboxItem
   },
   data () {
     return {
