@@ -10,6 +10,8 @@ const Home = () => import('./components/Home.vue').then(m => m.default)
 const Login = () => import('./components/Login.vue').then(m => m.default)
 const Register = () => import('./components/Register.vue').then(m => m.default)
 const Book = () => import('./components/Book.vue').then(m => m.default)
+const Search = () => import('./components/Search.vue').then(m => m.default)
+const User = () => import('./components/User.vue').then(m => m.default)
 
 Vue.use(VueRouter)
 
@@ -32,6 +34,16 @@ const routes = [{
   name: 'book',
   path: '/book',
   component: Book
+},
+{
+  name: 'search',
+  path: '/search',
+  component: Search
+},
+{
+  name: 'user',
+  path: '/user',
+  component: User
 }]
 
 const router = new VueRouter({

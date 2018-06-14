@@ -1,32 +1,115 @@
 <template>
   <div>
-    <x-header :left-options="{backText: ''}"></x-header>
-    <div class="vux-demo">
-      <img class="logo" src="../assets/vux_logo.png">
-      <h1> </h1>
-    </div>
-    <group title="cell demo">
-      <cell title="VUX" value="cool" is-link></cell>
-    </group>
+    <x-header :left-options="{backText: ''}"
+              title="书籍详情"></x-header>
+
+    {{book.name}}
+    <loading :show="showLoading" :text="loadingText"></loading>
+    <toast v-model="showTip" type="text">{{ tipMsg }}</toast>
   </div>
 </template>
 
 <script>
-import { XHeader, Group, Cell } from 'vux'
+import { XHeader, Toast, Loading } from 'vux'
 
 export default {
   components: {
     XHeader,
-    Group,
-    Cell
+    Toast,
+    Loading
   },
   data () {
     return {
-      // note: changing this line won't causes changes
-      // with hot-reload because the reloaded component
-      // preserves its current state and we are modifying
-      // its initial state.
-      msg: 'Hello World!'
+      book: {
+        id: this.$route.query.bookId,
+        bookIdThird: this.$route.query.bookIdThird,
+        faceUrl: '',
+        bookInfo: {
+        }
+      },
+      showTip: false,
+      tipMsg: '',
+      showLoading: false,
+      loadingText: ''
+    }
+  },
+  mounted () {
+    let _this = this
+    _this.loadBookDetail()
+  },
+  methods: {
+    loadBookDetail () {
+      let _this = this
+      _this.showLoading = true
+      _this.loadingText = '读取书籍信息...'
+
+      _this.ajax.post('/detail', {bookId: this.book.id, bookIdThird: this.book.bookIdThird})
+        .then(function (response) {
+          switch (response.data.statusCode) {
+            case 200:
+              _this.showLoading = false
+              _this.book = response.data.data
+              // 传递参数并加载书源信息
+              _this.bus.$emit('bookSourceApi', _this.book)
+              break
+            default:
+              _this.showLoading = false
+              // $dialog.alert({
+              //   content: '错误:' + response.data.message,
+              //   okTheme: 'energized'
+              // })
+          }
+        }).catch(function (error) {
+          _this.showLoading = false
+
+          console.log('服务器异常:' + JSON.stringify(error))
+        // $dialog.alert({
+          //   content: '服务器异常:' + JSON.stringify(error),
+          //   okTheme: 'calm'
+          // })
+        })
+    },
+    addOrDelBook () {
+      let _this = this
+      _this.showLoading = true
+      _this.loadingText = ''
+
+      _this.ajax.post('/addOrDel', {bookIdThird: this.book.bookIdThird})
+        .then(function (response) {
+          switch (response.data.statusCode) {
+            case 200:
+              _this.book.onShelf = response.data.data
+              break
+            default:
+              // $dialog.alert({
+              //   content: '错误:' + response.data.message,
+              //   okTheme: 'energized'
+              // })
+          }
+          _this.showLoading = false
+        }).catch(function (error) {
+          _this.showLoading = false
+
+          console.log('服务器异常:' + JSON.stringify(error))
+          // $dialog.alert({
+          //   content: '服务器异常:' + JSON.stringify(error),
+          //   okTheme: 'calm'
+          // })
+        })
+    },
+    startRead () {
+      this.$router.push({path: '/read',
+        query: {
+          bookId: this.book.id
+        }})
+    },
+    showSourceList () {
+      if (this.book.useApi) {
+        this.modalSource.show()
+      } else {
+        this.showTip = true
+        this.tipMsg = '非接口书籍请到设置中切换书源'
+      }
     }
   }
 }
