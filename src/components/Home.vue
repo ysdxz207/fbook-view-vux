@@ -12,7 +12,8 @@
              wrap="wrap"
              align="center">
       <flexbox-item :span="1/3"
-                    v-for="book in bookList"
+                    v-for="(book, index) in bookList"
+                    :key="index"
                     @click.native="goBookDetail(book)">
         <div class="book-container">
               <img class="book-img" :src="book.faceUrl"/>
@@ -31,6 +32,15 @@
         <x-icon type="ios-close-outline" style="fill:#fff;"></x-icon>
       </p>
     </x-dialog>
+
+    <flexbox :gutter="0"
+             orient="horizontal"
+             direction="row"
+             wrap="wrap"
+             align="center"
+             class="btn-add-book-group">
+      <flexbox-item ><div class="btn-add-book"><router-link :to="{ name: 'search'}" style="color: #FFFFFF">+</router-link></div></flexbox-item>
+    </flexbox>
 
     <loading :show="showLoading" :text="loadingText"></loading>
   </div>
@@ -148,5 +158,21 @@
     text-align: center;
     width: 100%;
     font-size: 12px;
+  }
+  .btn-add-book-group {
+    position: fixed;
+    bottom: 20px;
+  }
+  .btn-add-book {
+    width: 32px;
+    height: 32px;
+    line-height: 30px;
+    color: #ffffff;
+    font-size: 24px;
+    border: 0;
+    text-align: center;
+    background-color: #ff9407;
+    border-radius: 100%;
+    margin: 0 auto;
   }
 </style>
