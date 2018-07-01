@@ -1,4 +1,5 @@
 <template>
+  <transition name="slide-right">
   <div style="height: 100%;overflow-y: hidden;">
     <div @click="touchReadContent($event)"
          style="height: 100%;overflow-y: hidden;"
@@ -137,11 +138,11 @@
     <loading :show="showLoading" :text="loadingText"></loading>
     <toast v-model="showTip" type="text">{{ tipMsg }}</toast>
   </div>
+  </transition>
 </template>
 
 <script>
-  import {
-    XHeader,
+  import { XHeader,
     Loading,
     Toast,
     Swiper,
@@ -153,8 +154,7 @@
     Cell,
     Flexbox,
     FlexboxItem,
-    Group
-  } from 'vux'
+    Group } from 'vux'
 
   export default {
     components: {
@@ -260,7 +260,6 @@
         readContentObject: undefined,
         currentPage: 0,
         splitPages: [],
-        pageTransition: 'pop-in',
         wordsNum: 0,
         modalSource: undefined,
         bgColors: [
@@ -407,7 +406,6 @@
 
         if ((tap > (widthOrHeight / 3 * 2))) {
           // 下一页
-          _this.pageTransition = 'pop-in'
           if (_this.currentPage >= _this.splitPages.length - 1) {
             // 下一章
             _this.loadChapter(1)
@@ -428,7 +426,6 @@
           }
           _this.readContentObject.scrollTop = 0
 
-          _this.pageTransition = 'pop-out'
           _this.currentPage -= 1
         }
       },
@@ -634,6 +631,8 @@
 </script>
 
 <style lang="less" scoped>
+  @import '../styles/transition.less';
+
   .read-content-main {
     height: 100%;
   }

@@ -47,7 +47,7 @@
 </template>
 
 <script>
-  import {XHeader, Box, Flexbox, FlexboxItem, Loading, XDialog, Toast} from 'vux'
+  import { XHeader, Box, Flexbox, FlexboxItem, Loading, XDialog, Toast } from 'vux'
 
   export default {
     components: {
@@ -89,8 +89,14 @@
                 _this.bookReadSetting = response.data.data.bookReadSetting
                 break
               default:
+                _this.showLoading = false
+                if (response.data.statusCode === 401) {
+                  _this.$router.push({path: '/login'})
+                  return
+                }
                 _this.showTipWarn = true
                 _this.tipWarnMsg = response.data.message
+
                 if (response.data.errorCode === 'LOGIN_WRONG_PASSWORD') {
                   localStorage.getItem('isLogin')
                   _this.$router.push({path: '/login'})
@@ -146,8 +152,8 @@
 
   .book-container {
     margin-top: 12px;
-    margin-left: 6px;
-    margin-right: 6px;
+    margin-left: 12px;
+    margin-right: 12px;
   }
   .book-img {
     box-shadow: 4px 4px 6px rgba(0,0,0,.45);

@@ -75,6 +75,12 @@ let webpackConfig = {
         }
       }
     ]
+  },
+  externals: {
+    // 'vue': 'Vue',
+    // 'vue-router': 'VueRouter',
+    // 'axios': 'axios'
+
   }
 }
 

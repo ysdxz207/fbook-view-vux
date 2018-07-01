@@ -34,7 +34,7 @@
 </template>
 
 <script>
-  import {XHeader, Group, XInput, XButton, Box, Toast} from 'vux'
+  import { XHeader, Group, XInput, XButton, Box, Toast } from 'vux'
 
   export default {
     components: {

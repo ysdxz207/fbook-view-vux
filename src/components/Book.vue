@@ -1,4 +1,5 @@
 <template>
+  <transition name="slide-right">
   <div>
     <x-header :left-options="{backText: ''}"
               title="书籍详情"></x-header>
@@ -52,10 +53,11 @@
     <loading :show="showLoading" :text="loadingText"></loading>
     <toast v-model="showTip" type="text">{{ tipMsg }}</toast>
   </div>
+  </transition>
 </template>
 
 <script>
-  import {XHeader, Toast, Loading, Flexbox, FlexboxItem, Box, XButton} from 'vux'
+  import { XHeader, Toast, Loading, Flexbox, FlexboxItem, Box, XButton } from 'vux'
 
   export default {
     components: {
@@ -166,6 +168,7 @@
 </script>
 
 <style lang="less">
+  @import '../styles/transition.less';
 
   .book-detail-img {
     width: 100%;

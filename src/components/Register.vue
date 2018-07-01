@@ -28,7 +28,7 @@
 </template>
 
 <script>
-  import {XHeader, Group, XInput, XButton, Box} from 'vux'
+  import { XHeader, Group, XInput, XButton, Box } from 'vux'
 
   export default {
     components: {
