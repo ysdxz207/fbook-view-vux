@@ -25,11 +25,20 @@
            :hide-on-blur="false"
            :show-mask="false"
            v-model="isShowMenu"
-           style="background-color: #101010">
-      <x-header :left-options="{backText: ''}"
-                title="">
-        <a slot="right">换源</a>
-      </x-header>
+           style="background-color: #101010;color: #ffffff;">
+        <flexbox >
+          <flexbox-item>
+              <x-icon type="ios-arrow-left"
+                      size="30"
+                      style="fill: #CCCCCC"
+                      @click="goBack"></x-icon>
+          </flexbox-item>
+          <flexbox-item >
+            <a @click="showSourceList"
+               style="text-align: right;
+          padding-right: 8px;line-height: 10vh">换源</a>
+          </flexbox-item>
+        </flexbox>
     </popup>
 
     <!-- 下部主菜单 -->
@@ -117,22 +126,22 @@
            v-model="isShowChapterList"
            @on-show="isShowMenu=false"
            @on-hide="forceHideMenu ? isShowMenu=false : isShowMenu=true,forceHideMenu=false">
-      <vue-scroll :ops="scrollBarOptions">
-      <group>
-        <cell v-for="(chapter, index) in bookData.bookChapters"
-              :title="chapter.title"
-              :border-intent="true"
+        <div v-for="(chapter, index) in bookData.bookChapters"
               :key="index"
-              style="font-size: 14px;padding-left: 4px"
-              @click.native="readChapter(chapter)">
-          <slot style="vertical-align:middle;">
-            <span v-if="chapter.hasRead">已读</span>
-            <span v-if="!chapter.hasRead" style="color: green">未读</span>
-          </slot>
-        </cell>
+              style="font-size: 14px;
+              padding-left: 4px;height: 34px;
+              line-height:34px;border-bottom: 1px solid #e2e2e2;
+              vertical-align:middle;"
+              @click="readChapter(chapter)">
+            <div style="display: block;
+            white-space: nowrap;overflow: hidden;
+            text-overflow: ellipsis;width: 80%;float: left;">{{chapter.title}}</div>
+            <div style="float: right;margin-right: 4px;text-align: right">
+              <span v-if="chapter.hasRead">已读</span>
+              <span v-if="!chapter.hasRead" style="color: green">未读</span>
+            </div>
+        </div>
 
-      </group>
-      </vue-scroll>
     </popup>
 
     <loading :show="showLoading" :text="loadingText"></loading>
@@ -142,7 +151,8 @@
 </template>
 
 <script>
-  import { XHeader,
+  import {
+    XHeader,
     Loading,
     Toast,
     Swiper,
@@ -154,7 +164,8 @@
     Cell,
     Flexbox,
     FlexboxItem,
-    Group } from 'vux'
+    Group
+  } from 'vux'
 
   export default {
     components: {
@@ -180,41 +191,6 @@
         isShowMenuSub: false,
         keepMenu: false,
         isShowChapterList: false,
-        scrollBarOptions: {
-          vuescroll: {},
-          scrollPanel: {
-            initialScrollY: false,
-            initialScrollX: false,
-            // feat: #11
-            scrollingX: true,
-            scrollingY: true,
-            speed: 300,
-            easing: undefined
-          },
-          scrollContent: {
-            tag: 'div',
-            padding: false,
-            props: {},
-            attrs: {}
-          },
-          rail: {
-            vRail: {
-              width: '24px',
-              pos: 'right',
-              opacity: 0
-            }
-          },
-          bar: {
-            vBar: {
-              background: '#ffbd17',
-              keepShow: true,
-              opacity: 0.8,
-              hover: false, // only for PC
-              width: '24px',
-              height: '24px'
-            }
-          }
-        },
         showLoading: false,
         loadingText: '',
         showTip: false,
@@ -625,6 +601,9 @@
           // 滚动到顶部
           _this.bus.$emit('readScrollTop')
         })
+      },
+      goBack () {
+        this.$router ? this.$router.back() : window.history.back()
       }
     }
   }
