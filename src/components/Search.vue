@@ -6,7 +6,8 @@
     <search placeholder="书名/作者"
             v-model="search.keywords"
             @on-submit="onSearch"
-            @on-cancel="onCancel"></search>
+            @on-cancel="onCancel"
+            ref="search"></search>
 
     <group>
       <cell primary="content"
@@ -28,6 +29,8 @@
     <alert v-model="showAlert"
            content="alertMsg"
            :hide-on-blur="true"></alert>
+    <div class="search-book-error-message"
+          v-show="showError">{{errorMessage}}</div>
   </div>
 </template>
 
@@ -53,7 +56,9 @@ export default {
       showLoading: false,
       loadingText: '',
       showAlert: false,
-      alertMsg: ''
+      alertMsg: '',
+      showError: false,
+      errorMessage: ''
     }
   },
   mounted () {
@@ -72,6 +77,8 @@ export default {
   methods: {
     onSearch () {
       let _this = this
+      _this.showError = false
+      _this.search.bookList = []
       _this.loading = '搜索中...'
       _this.showLoading = true
       _this.ajax.post('/search', {keywords: this.search.keywords})
@@ -82,15 +89,16 @@ export default {
               _this.search.bookList = response.data.list
               localStorage.setItem('search_list', JSON.stringify(_this.search.bookList))
               localStorage.setItem('search_keywords', _this.search.keywords)
+              _this.$refs.search.setBlur()
               break
             default:
-              _this.alertMsg = '错误:' + response.data.message
-              _this.showAlert = true
+              _this.showError = true
+              _this.errorMessage = '错误:' + response.data.message
           }
         }).catch(function (error) {
           _this.showLoading = false
-          _this.alertMsg = '服务器异常:' + JSON.stringify(error)
-          _this.showAlert = true
+          _this.showError = true
+          _this.errorMessage = '错误:' + JSON.stringify(error)
         })
     },
     onCancel () {
@@ -116,4 +124,14 @@ export default {
   height: 80px;
   margin-right: 4px;
 }
+
+  .search-book-error-message {
+    color: #c8c8c8;
+    text-align: center;
+    font-weight: 500;
+    font-size: 16px;
+    position: absolute;
+    width: 100%;
+    top: 25%;
+  }
 </style>

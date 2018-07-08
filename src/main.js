@@ -3,6 +3,7 @@
 import Vue from 'vue'
 import FastClick from 'fastclick'
 import VueRouter from 'vue-router'
+import Navigation from 'vue-navigation'
 import App from './App'
 import Axios from 'axios'
 import { ToastPlugin, LoadingPlugin, AlertPlugin } from 'vux'
@@ -67,6 +68,8 @@ const router = new VueRouter({
   routes
 })
 
+Vue.use(Navigation, {router})
+
 FastClick.attach(document.body)
 
 Vue.config.productionTip = false
@@ -121,6 +124,7 @@ Vue.prototype.getChapterInfo = function (args, callback) {
   if (args.lastReadingChapterNum === 0 &&
     args.direction === -1) {
     _this.$vux.toast.text('已经是第一章了', 'top')
+    this.$vux.loading.hide()
     return
   }
 
@@ -128,6 +132,7 @@ Vue.prototype.getChapterInfo = function (args, callback) {
     args.lastChapterNum &&
     args.direction === 1) {
     _this.$vux.toast.text('已经是最后一章了', 'top')
+    this.$vux.loading.hide()
     return
   }
 

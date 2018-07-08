@@ -1,12 +1,30 @@
 <template>
   <div id="app">
-    <router-view></router-view>
+    <transition :name="transitionName">
+      <navigation>
+        <router-view></router-view>
+      </navigation>
+    </transition>
   </div>
 </template>
 
 <script>
+
 export default {
-  name: 'app'
+  name: 'app',
+  data () {
+    return {
+      transitionName: 'pop-in'
+    }
+  },
+  created () {
+    this.$navigation.on('forward', (to, from) => {
+      this.transitionName = 'pop-in'
+    })
+    this.$navigation.on('back', (to, from) => {
+      this.transitionName = 'pop-out'
+    })
+  }
 }
 </script>
 

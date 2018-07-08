@@ -1,5 +1,4 @@
 <template>
-  <transition name="slide-right">
   <div style="height: 100%;overflow-y: hidden;">
     <div @click="touchReadContent($event)"
          style="height: 100%;overflow-y: hidden;"
@@ -33,10 +32,11 @@
                       style="fill: #CCCCCC"
                       @click="goBack"></x-icon>
           </flexbox-item>
-          <flexbox-item >
-            <a @click="showSourceList"
-               style="text-align: right;
-          padding-right: 8px;line-height: 10vh">换源</a>
+          <flexbox-item @click.native="showSourceList"
+                        style="text-align: right;
+                        padding-right: 8px;
+                        line-height: 10vh">
+            换源
           </flexbox-item>
         </flexbox>
     </popup>
@@ -126,7 +126,7 @@
            v-model="isShowChapterList"
            @on-show="isShowMenu=false"
            @on-hide="forceHideMenu ? isShowMenu=false : isShowMenu=true,forceHideMenu=false">
-        <div v-for="(chapter, index) in bookData.bookChapters"
+        <div v-for="(chapter, index) in bookData.bookChapters.slice(0, 100)"
               :key="index"
               style="font-size: 14px;
               padding-left: 4px;height: 34px;
@@ -137,7 +137,7 @@
             white-space: nowrap;overflow: hidden;
             text-overflow: ellipsis;width: 80%;float: left;">{{chapter.title}}</div>
             <div style="float: right;margin-right: 4px;text-align: right">
-              <span v-if="chapter.hasRead">已读</span>
+              <span v-if="chapter.hasRead" style="color: #CCCCCC">已读</span>
               <span v-if="!chapter.hasRead" style="color: green">未读</span>
             </div>
         </div>
@@ -147,7 +147,6 @@
     <loading :show="showLoading" :text="loadingText"></loading>
     <toast v-model="showTip" type="text">{{ tipMsg }}</toast>
   </div>
-  </transition>
 </template>
 
 <script>

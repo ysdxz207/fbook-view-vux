@@ -14,7 +14,8 @@
       <flexbox-item :span="1/3"
                     v-for="(book, index) in bookList"
                     :key="index"
-                    @click.native="goBookDetail(book)">
+                    @click.native="goBookDetail(book)"
+                    style="min-height: 140px">
         <div class="book-container">
               <img class="book-img" :src="book.faceUrl"/>
               <div class="book-title" :style="(book.useApi == bookReadSetting.useApi) ? 'color:#ff9407' : 'color: #ddd'">{{ book.name }}</div>
@@ -42,12 +43,34 @@
       <flexbox-item ><div class="btn-add-book"><router-link :to="{ name: 'search'}" style="color: #FFFFFF">+</router-link></div></flexbox-item>
     </flexbox>
 
-    <loading :show="showLoading" :text="loadingText"></loading>
+    <masker color="#fbf9fe"
+            :opacity="1"
+            :fullscreen="true"
+            v-show="showLoading">
+      <div slot="content"
+           style="color: #c8c8c8;
+           text-align: center;
+           font-weight: 500;
+           font-size: 16px;
+           position: absolute;
+           width: 100%;
+           top: 5%;">
+        加载中...
+      </div>
+    </masker>
   </div>
 </template>
 
 <script>
-  import { XHeader, Box, Flexbox, FlexboxItem, Loading, XDialog, Toast } from 'vux'
+  import {
+    XHeader,
+    Box,
+    Flexbox,
+    FlexboxItem,
+    Masker,
+    XDialog,
+    Toast
+  } from 'vux'
 
   export default {
     components: {
@@ -55,7 +78,7 @@
       Box,
       Flexbox,
       FlexboxItem,
-      Loading,
+      Masker,
       XDialog,
       Toast
     },
@@ -70,15 +93,13 @@
         tipWarnMsg: '',
         showDialog: false,
         dialogMsg: '',
-        showLoading: false,
-        loadingText: ''
+        showLoading: false
       }
     },
     methods: {
       loadBooks () {
         let _this = this
         _this.showLoading = true
-        _this.loadingText = '读取书架信息...'
 
         _this.ajax.get('/')
           .then(function (response) {

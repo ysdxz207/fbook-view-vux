@@ -1,10 +1,11 @@
 <template>
-  <transition name="slide-right">
   <div>
     <x-header :left-options="{backText: ''}"
               title="书籍详情"></x-header>
 
-    <box gap="18px">
+
+
+    <div style="padding: 18px">
       <flexbox :gutter="16">
         <flexbox-item :span="4/10">
           <img :src="book.faceUrl" class="book-detail-img"/>
@@ -49,25 +50,47 @@
           <p v-text="book.bookInfo.description" class="book-detail-description"></p>
         </flexbox-item>
       </flexbox>
-    </box>
-    <loading :show="showLoading" :text="loadingText"></loading>
+    </div>
+
+    <masker color="#fbf9fe"
+            :opacity="1"
+            :fullscreen="true"
+            v-show="showLoading">
+      <div slot="content"
+           style="color: #c8c8c8;
+           text-align: center;
+           font-weight: 500;
+           font-size: 16px;
+           position: absolute;
+           width: 100%;
+           top: 5%;">
+        加载中...
+      </div>
+    </masker>
     <toast v-model="showTip" type="text">{{ tipMsg }}</toast>
   </div>
-  </transition>
 </template>
 
 <script>
-  import { XHeader, Toast, Loading, Flexbox, FlexboxItem, Box, XButton } from 'vux'
+  import {
+    XHeader,
+    Toast,
+    Flexbox,
+    FlexboxItem,
+    Box,
+    XButton,
+    Masker
+  } from 'vux'
 
   export default {
     components: {
       XHeader,
       Toast,
-      Loading,
       Flexbox,
       FlexboxItem,
       Box,
-      XButton
+      XButton,
+      Masker
     },
     data () {
       return {
@@ -79,8 +102,8 @@
         },
         showTip: false,
         tipMsg: '',
-        showLoading: false,
-        loadingText: ''
+        showLoading: true,
+        transitionName: 'slide-right'
       }
     },
     mounted () {
@@ -91,7 +114,6 @@
       loadBookDetail () {
         let _this = this
         _this.showLoading = true
-        _this.loadingText = '读取书籍信息...'
 
         _this.ajax.post('/detail', {bookId: this.book.id, bookIdThird: this.book.bookIdThird})
           .then(function (response) {
@@ -202,5 +224,6 @@
     color: #525252;
     margin: 0px;
   }
+
 
 </style>
