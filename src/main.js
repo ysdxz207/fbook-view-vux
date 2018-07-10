@@ -20,6 +20,7 @@ const Search = () => import('./components/Search.vue').then(m => m.default)
 const User = () => import('./components/User.vue').then(m => m.default)
 const Read = () => import('./components/Read.vue').then(m => m.default)
 const Test = () => import('./components/Test.vue').then(m => m.default)
+const TestPopup = () => import('./components/TestPopup.vue').then(m => m.default)
 
 Vue.use(VueRouter)
 
@@ -62,6 +63,11 @@ const routes = [{
   name: 'test',
   path: '/test',
   component: Test
+},
+{
+  name: 'testpopup',
+  path: '/popup',
+  component: TestPopup
 }]
 
 const router = new VueRouter({

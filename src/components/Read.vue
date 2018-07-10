@@ -9,7 +9,7 @@
 
       <swiper class="read-content-main"
               :style="readConfig.readContentStyle"
-              height="100%"l
+              height="100%"
               :show-dots="false"
               v-model="currentPage">
         <swiper-item v-for="(page, index) in splitPages"
@@ -19,12 +19,15 @@
       </swiper>
     </div>
     <!-- 上部菜单 -->
+    <div v-transfer-dom>
     <popup position="top"
            height="10vh"
            :hide-on-blur="false"
            :show-mask="false"
            v-model="isShowMenu"
-           style="background-color: #101010;color: #ffffff;">
+           style="background-color: #101010;
+           color: #ffffff;position: absolute;
+           top: .001em;">
         <flexbox >
           <flexbox-item>
               <x-icon type="ios-arrow-left"
@@ -40,6 +43,7 @@
           </flexbox-item>
         </flexbox>
     </popup>
+    </div>
 
     <!-- 下部主菜单 -->
     <popup position="bottom"
@@ -126,7 +130,7 @@
            v-model="isShowChapterList"
            @on-show="isShowMenu=false"
            @on-hide="forceHideMenu ? isShowMenu=false : isShowMenu=true,forceHideMenu=false">
-        <div v-for="(chapter, index) in bookData.bookChapters.slice(0, 100)"
+        <div v-for="(chapter, index) in bookData.bookChapters"
               :key="index"
               style="font-size: 14px;
               padding-left: 4px;height: 34px;
@@ -163,10 +167,14 @@
     Cell,
     Flexbox,
     FlexboxItem,
-    Group
+    Group,
+    TransferDom
   } from 'vux'
 
   export default {
+    directives: {
+      TransferDom
+    },
     components: {
       XHeader,
       Loading,
@@ -248,13 +256,13 @@
           '#322319'],
         colors: [
           '#2f2f2f',
-          '#ffffff',
+          '#cecece',
           '#2f2f2f',
           '#1b1b1b',
-          '#f1efc3',
-          '#e5e3b9',
-          '#c7c5a1',
-          '#bdbb99'],
+          '#89876f',
+          '#9c9a7e',
+          '#a6a487',
+          '#aaa88a'],
         currentBgColor: '#99a988',
         minFontSize: 14,
         maxFontSize: 40,
@@ -375,7 +383,11 @@
 
         // 点击屏幕中央唤起菜单
         if (tap < (widthOrHeight / 3 * 2) && tap > (widthOrHeight / 3 * 1)) {
-          _this.isShowMenu = true
+          _this.isShowMenu = !_this.isShowMenu
+          return
+        }
+
+        if (_this.isShowMenu) {
           return
         }
 
@@ -623,5 +635,13 @@
   }
   .vux-range-input-box {
     margin-left: 10px
+  }
+
+  .vux-popup-animate-top-enter-active {
+    transform: translate3d(0, 0, 0);
+    transition: all .3s;
+  }
+  .vux-popup-animate-top-enter, .vux-popup-animate-top-leave-active {
+    transform: translate3d(0, -99%, 0);
   }
 </style>
